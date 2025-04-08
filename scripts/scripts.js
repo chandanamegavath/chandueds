@@ -40,7 +40,7 @@ export function getOrigin() {
   const { location } = window;
   return location.href === 'about:srcdoc' ? window.parent.location.origin : location.origin;
 }
- 
+
 /**
  * Returns the true of the current page in the browser.mac
  * If the page is running in a iframe with srcdoc,
@@ -161,21 +161,6 @@ async function applyTemplates(doc) {
   if (doc.body.classList.contains('columns')) {
     buildTemplateColumns(doc);
   }
-}
-
-/**
- * Notifies dropins about the current loading state.
- * @param {string} state The loading state to notify
- */
-function notifyUI(event) {
-  // skip if the event was already sent
-  if (events.lastPayload(`aem/${event}`) === event) return;
-  // notify dropins about the current loading state
-  const handleEmit = () => events.emit(`aem/${event}`);
-  // listen for prerender event
-  document.addEventListener('prerenderingchange', handleEmit, { once: true });
-  // emit the event immediately
-  handleEmit();
 }
 
 /**
@@ -311,8 +296,7 @@ async function loadEager(doc) {
     document.body.classList.add('appear');
   }
 
-  // notify that the page is ready for eager loading
-  notifyUI('lcp');
+  events.emit('eds/lcp', true);
 
   try {
     /* if desktop (proxy for fast connection) or fonts already loaded, load fonts.css */
