@@ -1,3 +1,4 @@
+import { getMetadata } from './aem.js';
 import { getHref, getOrigin } from './scripts.js';
 
 const ALLOWED_CONFIGS = ['prod', 'stage', 'dev'];
